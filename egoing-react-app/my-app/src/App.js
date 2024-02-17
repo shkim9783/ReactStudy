@@ -32,7 +32,8 @@ function Nav(props) {
       <a href={'/read/'+index} onClick={(event)=>{
             event.preventDefault();
             //props.onChangeMode();
-            alert(list.title);
+            //alert(list.title);
+            
       }}>{list.title}</a>
     </li>
   ));
