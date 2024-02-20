@@ -1,5 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
+import { useState } from "react";
 
 /* 
 // 구문오류 발생
@@ -30,10 +31,11 @@ function Nav(props) {
   const navList = props.topices.map((list, index) => (
     <li key={index}>
       <a href={'/read/'+index} onClick={(event)=>{
-            event.preventDefault();
-            //props.onChangeMode();
-            //alert(list.title);
-            
+        event.preventDefault();
+        //setTitle({list});
+        //console.log(list);
+        props.onChangeTitle(list.title);
+        props.onChangeContent(list.content);
       }}>{list.title}</a>
     </li>
   ));
@@ -65,18 +67,24 @@ function App() {
     { title: "css", content: "css is..." },
     { title: "javascript", content: "javascript is..." },
   ];
+
+  const [title, setTitle] = useState("Welcome");
+  const [content, setContent] = useState("Hello, WEB");
+
   return (
     <div>
       <img src={logo} className="App-logo" alt="logo" />
       <Header title="WEB" href="/" onChangeMode={()=>{
-        alert("Header!");
+        setTitle("Welcome");
+        setContent("Hello, WEB");
       }}></Header>
 
-      <Nav topices={topices} onChangeMode={()=>{
-        //alert(topices);
-      }}></Nav>
+      <Nav topices={topices}
+            onChangeTitle={setTitle}
+            onChangeContent={setContent}
+      ></Nav>
 
-      <Section title="Welcome" content="Hello, WEB"></Section>
+      <Section title={title} content={content}></Section>
     </div>
   );
 }
