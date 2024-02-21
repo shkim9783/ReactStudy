@@ -48,14 +48,49 @@ function Nav(props) {
 }
 
 function Section(props) {
+
+  const [createMode, SetCreateMode] = useState(false);
+
   return (
     <section>
-      <h2>{props.title}</h2>
-      <span>{props.content}</span>
+        {createMode ? (
+          <Create></Create>
+        ) : (
+          <div>
+            <h2>{props.title}</h2>
+            <span>{props.content}</span>
+            
+            <div><a href="/" onClick={(event)=>{
+              event.preventDefault();
+              SetCreateMode(true)
+              }}>Create</a></div>
+          </div>
+        )} 
+
     </section>
   );
+
 }
 
+function Create(){
+  
+  return(
+      <div>
+          <h2>Create</h2>
+          <form onSubmit={event=>{
+              event.preventDefault();
+
+              // event.target == 이벤트가 발생한 태그
+              const title = event.target.title.value;
+              const content = event.target.content.value;
+            }}>
+              <p><input placeholder="title" /></p>
+              <p><textarea placeholder="content" /></p>
+              <p><input type="submit" value="Create"></input></p>
+          </form>
+      </div>
+  )
+}
 
 
 
