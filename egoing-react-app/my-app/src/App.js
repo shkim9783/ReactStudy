@@ -32,10 +32,11 @@ function Nav(props) {
     <li key={index}>
       <a href={'/read/'+index} onClick={(event)=>{
         event.preventDefault();
-        //setTitle({list});
-        //console.log(list);
+        
         props.onChangeTitle(list.title);
         props.onChangeContent(list.content);
+        props.setCreateMode(false);
+
       }}>{list.title}</a>
     </li>
   ));
@@ -49,12 +50,13 @@ function Nav(props) {
 
 function Section(props) {
 
-  const [createMode, SetCreateMode] = useState(false);
-
   return (
     <section>
-        {createMode ? (
-          <Create></Create>
+        {props.createMode ? (
+          <Create
+            topices={props.topices}
+            setTopices={props.setTopices}
+          ></Create>
         ) : (
           <div>
             <h2>{props.title}</h2>
@@ -62,7 +64,7 @@ function Section(props) {
             
             <div><a href="/" onClick={(event)=>{
               event.preventDefault();
-              SetCreateMode(true)
+              props.setCreateMode(true)
               }}>Create</a></div>
           </div>
         )} 
@@ -72,7 +74,7 @@ function Section(props) {
 
 }
 
-function Create(){
+function Create(props){
   
   return(
       <div>
@@ -83,9 +85,15 @@ function Create(){
               // event.target == 이벤트가 발생한 태그
               const title = event.target.title.value;
               const content = event.target.content.value;
+
+              props.setTopices([...props.topices.concat({title: title, content: content})]);
+
+              console.log(...props.topices);
+
             }}>
-              <p><input placeholder="title" /></p>
-              <p><textarea placeholder="content" /></p>
+
+              <p><input type="text" name="title" placeholder="title" /></p>
+              <p><textarea name="content" placeholder="content" /></p>
               <p><input type="submit" value="Create"></input></p>
           </form>
       </div>
@@ -97,14 +105,16 @@ function Create(){
 
 
 function App() {
-  const topices = [
+  const [topices, setTopices] = useState([
     { title: "html", content: "html is..." },
     { title: "css", content: "css is..." },
     { title: "javascript", content: "javascript is..." },
-  ];
+  ]);
 
   const [title, setTitle] = useState("Welcome");
   const [content, setContent] = useState("Hello, WEB");
+
+  const [createMode, setCreateMode] = useState(false);
 
   return (
     <div>
@@ -117,9 +127,17 @@ function App() {
       <Nav topices={topices}
             onChangeTitle={setTitle}
             onChangeContent={setContent}
+            setCreateMode={setCreateMode}
       ></Nav>
 
-      <Section title={title} content={content}></Section>
+      <Section 
+        topices={topices}
+        title={title}
+        content={content}
+        createMode={createMode}
+        setTopices={setTopices}
+        setCreateMode={setCreateMode}
+      ></Section>
     </div>
   );
 }
