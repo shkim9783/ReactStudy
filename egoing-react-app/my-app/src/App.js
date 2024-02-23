@@ -21,6 +21,7 @@ function Header(props) {
             event.preventDefault();
             // 상위에서 정의된 함수를 내부에서 실행한다.
             props.onChangeMode();
+            props.setReadMode(false);
         }}>{props.title}</a>
       </h1>
     </header>
@@ -36,6 +37,7 @@ function Nav(props) {
         props.onChangeTitle(list.title);
         props.onChangeContent(list.content);
         props.setCreateMode(false);
+        props.setReadMode(true);
 
       }}>{list.title}</a>
     </li>
@@ -62,10 +64,22 @@ function Section(props) {
             <h2>{props.title}</h2>
             <span>{props.content}</span>
             
-            <div><a href="/" onClick={(event)=>{
-              event.preventDefault();
-              props.setCreateMode(true)
-              }}>Create</a></div>
+            <div>
+              <ul>
+                <li><a href="/" onClick={(event)=>{
+                  event.preventDefault();
+                  props.setCreateMode(true)
+                  props.setMode('CREATE');
+                }}>Create</a></li>
+                
+                <li><a href="/" onClick={(event)=>{
+                  event.preventDefault();
+                  props.setMode('UPDATE');
+                }}>Update</a></li>
+              </ul>
+              
+
+            </div>
           </div>
         )} 
 
@@ -115,19 +129,27 @@ function App() {
   const [content, setContent] = useState("Hello, WEB");
 
   const [createMode, setCreateMode] = useState(false);
+  const [mode, setMode] = useState('');
 
   return (
     <div>
       <img src={logo} className="App-logo" alt="logo" />
-      <Header title="WEB" href="/" onChangeMode={()=>{
-        setTitle("Welcome");
-        setContent("Hello, WEB");
-      }}></Header>
+      <Header
+        title="WEB"
+        href="/"
+        onChangeMode={()=>{
+          setTitle("Welcome");
+          setContent("Hello, WEB");
+          setMode('');
+      }}
+      setMode={setMode}
+      ></Header>
 
       <Nav topices={topices}
             onChangeTitle={setTitle}
             onChangeContent={setContent}
             setCreateMode={setCreateMode}
+            setMode={setMode}
       ></Nav>
 
       <Section 
